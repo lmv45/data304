@@ -1,0 +1,273 @@
+---
+title: "hw7 - Lien Veldboom"
+format: html
+editor: visual
+---
+
+```{python}
+import altair as alt
+import pandas as pd
+```
+
+```{python}
+gas = pd.read_csv('https://calvin-data304.netlify.app/data/pump_price_for_gasoline_us_per_liter.csv')
+countries = pd.read_csv('https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/all/all.csv')
+gas_long = gas.melt(id_vars='country')
+gas_na = gas_long.dropna(subset=['value'])
+merged = pd.merge(gas_na, countries[['name', 'alpha-3', 'region']], how='left',
+                  left_on='country', right_on='name')
+merged_1 = merged.dropna(subset=['region'])
+merged_final = merged_1.astype({'value': 'float'})
+merged_final['Price in Gallon'] = merged_final['value']*3.78541
+
+chart = alt.Chart(merged_final).mark_bar().encode(
+    x=alt.X('region:N', title='Region',sort='-y'),
+    y=alt.Y('mean(value):Q', title='Mean Gas Price per Gallon'),
+    color=alt.Color('region:N', title='Region')
+).properties(
+    width=600,
+    title='European Countriess have Highest Mean Price per Gallon on Gas')
+chart
+
+```
+
+```{python}
+democracy = pd.read_csv('https://calvin-data304.netlify.app/data/wvs.csv')
+
+alt.data_transformers.disable_max_rows()
+
+alt.Chart(democracy).mark_bar().encode(
+    y=alt.Y('country:O', sort='-x'),
+    x='count():Q',
+    color ='country')
+
+```
+
+```{python}
+worldage3 = democracy.groupby(['country', 'age3'])['age'].agg(['min', 'max']).reset_index()
+
+alt.Chart(worldage3).mark_bar().encode(
+    x=alt.X('country:N', title='Country'),
+    y=alt.Y('min:Q', title='Age'),
+    y2='max:Q',
+    color=alt.Color('age3:N', title="Age Group"))
+```
+
+From this graph, you can see that the 3 different age groups are -
+1 = 0-29, but based on this graph I would say it is more 17-29 with no participants younger than 15. 
+
+2= 30-49
+
+3= 50+
+
+It seems it is the ame for each country as well. 
+
+```{python}
+worldage6 = democracy.groupby(['country', 'age6'])['age'].agg(['min', 'max']).reset_index()
+
+alt.Chart(worldage6).mark_bar().encode(
+    x=alt.X('country:N', title='Country'),
+    y=alt.Y('min:Q', title='Age'),
+    y2='max:Q',
+    color=alt.Color('age6:N', title="Age Group"))
+```
+
+From this graph, you can see that the 6 different age groups are -
+1 = 0-24, but based on this graph I would say it is more 17-24 with no participants younger than 15. 
+
+2= 25-34
+
+3= 35-44
+
+4= 45-54
+
+5= 55-64
+
+6 = 65+
+
+It seems it is the same for each country as well. 
+
+```{python}
+worldproportion = democracy[['country', 'age6', 'democracy_importance']]
+
+worldproportion['responses_10'] = worldproportion.loc[:,'democracy_importance'].apply(lambda x: 1 if x == 10 else 0)
+
+base = alt.Chart(worldproportion).encode(
+    x=alt.X("age6:O", sort='-x',title=""),
+    y=alt.Y("responses_10:Q", title=""))
+
+error = base.mark_errorband(extent="ci")
+
+point = base.mark_circle(size=20).encode(
+    y=alt.Y("mean(responses_10):Q"))
+
+line = base.mark_line().encode(
+    y=alt.Y("mean(responses_10):Q"))
+
+final_proportion = error + line + point
+
+final_proportion.facet(
+    column = alt.Column("country:N", title="")).resolve_scale(y='independent').properties(
+    title="Younger Generations Less Likley to say it is Essential to Live in a Democracy"
+)
+```
+
+```{python}
+average_democracy = democracy[['country', 'age6', 'democracy_importance']]
+
+base = alt.Chart(average_democracy).encode(
+    x=alt.X("age6:O", sort='-x',title=""),
+    y=alt.Y("democracy_importance:Q", title=""))
+
+error = base.mark_errorband(extent="ci")
+
+point = base.mark_circle(size=15).encode(
+    y=alt.Y("mean(democracy_importance):Q"))
+    
+line = base.mark_line().encode(
+    y=alt.Y("mean(democracy_importance):Q"))
+
+average_final = error + line + point
+
+average_final.facet(
+    column = alt.Column("country:N", title="")).resolve_scale(y='independent').properties(
+    title="On Average People who say it is Essential to Live in a Democracy Decreases the Younger they are ")
+```
+
+```{python}
+worldproportion = democracy[['country', 'age', 'democracy_importance']]
+
+worldproportion['responses_10'] = worldproportion.loc[:,'democracy_importance'].apply(lambda x: 1 if x == 10 else 0)
+
+base = alt.Chart(worldproportion).encode(
+    x=alt.X("age:O", sort='-x',title="",axis=alt.Axis(values=[0,10,20,30,40,50,60,70,80,90,100])),
+    y=alt.Y("responses_10:Q", title="")).properties(
+    width=500,
+    height=300)
+    
+    
+error = base.mark_errorband(extent="ci")
+
+point = base.mark_circle(size=20).encode(
+    y=alt.Y("mean(responses_10):Q"))
+
+line = base.mark_line().encode(
+    y=alt.Y("mean(responses_10):Q"))
+
+final_proportion = error + line + point
+
+final_proportion.facet(
+    column = alt.Column("country:N", title="")).resolve_scale(y='independent').properties(
+    title="Younger Generations Less Likley to say it is Essential to Live in a Democracy"
+)
+```
+
+```{python}
+average_democracy = democracy[['country', 'age', 'democracy_importance']]
+
+base = alt.Chart(average_democracy).encode(
+    x=alt.X("age:O", sort='-x',title="",axis=alt.Axis(values=[0,10,20,30,40,50,60,70,80,90,100])),
+    y=alt.Y("democracy_importance:Q", title="")).properties(
+    width=500,
+    height=300)
+    
+error = base.mark_errorband(extent="ci")
+
+point = base.mark_circle(size=15).encode(
+    y=alt.Y("mean(democracy_importance):Q"))
+    
+line = base.mark_line().encode(
+    y=alt.Y("mean(democracy_importance):Q"))
+
+average_final = error + line + point
+
+average_final.facet(
+    column = alt.Column("country:N", title="")).resolve_scale(y='independent').properties(
+    title="On Average People who say it is Essential to Live in a Democracy Decreases the Younger they are ")
+```
+
+I do not like either of these graphs more using age instead of age6. It is really hard to look at and too busy to see any real patterns within the data. Specifally for the proportion graph, when you have an age on the graph that doens't have an anwer the graph goes to 0. This makes it look like it jumps up and down so much, when in reality it might not. The confidence interval is also so much wider for the age graph vs the aget graph. 
+
+```{python}
+loess= democracy[['age', 'country', 'democracy_importance']]
+
+loess = loess.groupby(['age', 'country'])['democracy_importance'].mean().reset_index()
+
+point = alt.Chart(loess ).mark_point().encode(
+    x=alt.X("age:O", sort='-x',title="",axis=alt.Axis(values=[0,10,20,30,40,50,60,70,80,90,100])),
+    y='democracy_importance:Q').properties(
+    width=500,
+    height=300)
+
+line = alt.Chart(loess).transform_loess(
+    'age', 'democracy_importance', groupby=['country']
+).mark_line(
+).encode(
+    x=alt.X("age:O", sort='-x',title="",axis=alt.Axis(values=[0,10,20,30,40,50,60,70,80,90,100])),
+    y='democracy_importance:Q').properties(
+    width=500,
+    height=300)
+
+loess_final = line + point
+
+loess_final.facet(
+    column = alt.Column("country:N", title="")).resolve_scale(y='independent').properties(
+    title="LOcally Estimated Scatterplot Smoothing  ")
+```
+
+ I like this graph more. You can see the overall pattern way better than what you could in the other graph that used ages instead of age6. It isn't overwheling. While you can see the overall trend, with the dots you can also see the actual mean of response from each age too. 
+
+```{python}
+regression= democracy[['age', 'country', 'democracy_importance']]
+
+regression = regression.groupby(['age', 'country'])['democracy_importance'].mean().reset_index()
+
+point = alt.Chart(regression ).mark_point().encode(
+     x=alt.X("age:O", sort='-x',title="",axis=alt.Axis(values=[0,10,20,30,40,50,60,70,80,90,100])),
+    y='democracy_importance:Q').properties(
+    width=500,
+    height=300)
+
+line = alt.Chart(regression).transform_regression(
+    'age', 'democracy_importance', groupby=['country'], method='linear'
+).mark_line(
+).encode(
+     x=alt.X("age:O", sort='-x',title="",axis=alt.Axis(values=[0,10,20,30,40,50,60,70,80,90,100])),
+    y='democracy_importance:Q').properties(
+    width=500,
+    height=300)
+
+linear_final = line + point
+
+linear_final.facet(
+    column = alt.Column("country:N", title="")).resolve_scale(y='independent').properties(
+    title="Linear Regression")
+```
+
+```{python}
+regression= democracy[['age', 'country', 'democracy_importance']]
+
+regression = regression.groupby(['age', 'country'])['democracy_importance'].mean().reset_index()
+
+point = alt.Chart(regression ).mark_point().encode(
+    x=alt.X("age:O", sort='-x',title="",axis=alt.Axis(values=[0,10,20,30,40,50,60,70,80,90,100])),
+    y='democracy_importance:Q').properties(
+    width=500,
+    height=300)
+
+line = alt.Chart(regression).transform_regression(
+    'age', 'democracy_importance', groupby=['country'], method='poly'
+).mark_line(
+).encode(
+     x=alt.X("age:O", sort='-x',title="",axis=alt.Axis(values=[0,10,20,30,40,50,60,70,80,90,100])),
+    y='democracy_importance:Q').properties(
+    width=500,
+    height=300)
+
+poly_final = line + point
+
+poly_final.facet(
+    column = alt.Column("country:N", title="")).resolve_scale(y='independent').properties(
+    title="Polynomial Regression")
+```
+
