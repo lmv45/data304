@@ -1,0 +1,141 @@
+---
+title: "hw5"
+format: html
+editor: visual
+embed-resources: true
+---
+
+```{python}
+import altair as alt
+import pandas as pd
+```
+
+Question 1 -
+
+```{python}
+jobs_url = "https://cdn.jsdelivr.net/npm/vega-datasets@2.8.0/data/jobs.json"
+jobs = pd.read_json(jobs_url)
+jobs1 = jobs[jobs["year"].isin([1950,2000])]
+print(jobs1[0:4])
+jobs2 = jobs[jobs["job"].isin(['Actor','Agent'])]
+print(jobs2[0:4])
+jobs3 = jobs[jobs["job"].isin(['Nurse','Military'])]
+print(jobs3[0:4])
+```
+
+```{python}
+jobs_graphic = alt.Chart(jobs1).transform_pivot(
+    'year',
+    groupby=["job", "sex"],
+    value='perc'
+).mark_point(filled = True).encode(
+    x='1950:Q',
+    y='2000:Q',
+    tooltip = ['job']).properties(
+  width = 400, height = 100
+).facet(
+  row = "sex")
+jobs_graphic
+```
+
+```{python}
+facet_graphic = alt.Chart(jobs2).mark_line().encode(
+    alt.X(field = "year", title = ""),
+    alt.Color("job:O").scale(scheme = "viridis"),
+    y = 'perc:Q'
+).properties(
+  width = 400, height = 100
+).facet(
+  row = "sex"
+)
+
+facet_graphic
+```
+
+```{python}
+facet_graphic1 = alt.Chart(jobs3).mark_line(point = True).encode(
+    alt.X(field = "year", title = ""),
+    alt.Color("job:O").scale(scheme = "viridis"),
+    y = 'perc:Q'
+).properties(
+  width = 400, height = 100
+).facet(
+  row = "sex"
+)
+
+facet_graphic1
+```
+
+Question 2 -
+
+1.  <div>
+
+    ```{python}
+    from vega_datasets import data
+    gapminder = pd.read_json(data.gapminder.url)
+    world2_url = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
+    world = alt.topo_feature(world2_url, feature='countries')
+    gapminder1 = gapminder[gapminder["year"].isin([2005])]
+    alt.Chart(world).mark_geoshape().encode(
+        color='life_expect:Q'
+    ).transform_lookup(
+        lookup='properties.name',
+        from_=alt.LookupData(gapminder1,key ='country',fields=['life_expect'])
+    ).properties(
+        width=500,
+        height=300
+    ).project(
+        type='equalEarth'
+    )
+    ```
+
+    </div>
+
+```{python}
+import altair as alt
+from vega_datasets import data
+airports = data.airports()
+states = alt.topo_feature('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json', feature = 'states')
+abb = "https://raw.githubusercontent.com/jasonong/List-of-US-States/master/states.csv"
+state_abbr = pd.read_csv(abb)
+airport_state = airports.groupby("state", as_index=False). agg(total =('state','count'))
+
+alt.Chart(states).mark_geoshape().encode(
+    color='total:Q'
+).transform_lookup(
+    lookup='properties.name',
+    from_=alt.LookupData(state_abbr,key ='State',fields=['Abbreviation'])
+).transform_lookup(
+    lookup='Abbreviation',
+    from_=alt.LookupData(airport_state,key ='state',fields=['total'])
+).properties(
+    width=500,
+    height=300
+).project(
+    type='albersUsa'
+)
+```
+
+Questions 3 -
+
+<https://r-graph-gallery.com/web-choropleth-map-lego-style.html>
+
+a.  What is the main story of this graphic?
+
+    a.  The Southern part of France has more members in a sports association than in the Northern part.
+
+b.  What makes it a good graphic?
+
+    a.  The color scale and variations were enough to be able to tell them apart. I liked how it wasn't just a ranging scale, but distinct color squares. This made the graph easy to read and see the different colors. It was easy to read the graph and get the main point out of it.
+
+    b.  Seeing the LEGO texture was a plus for me
+
+c.  What features do you think you would know how to implement in Vega-lite?
+
+    a.  I would know how to make the graph part of it.
+
+d.  Are there any features of the graphic that you would not know how to do in Vega-lite? If so, list them.
+
+    a.  The LEGO texture
+
+    b.  The district color scale, and not just a continuous one.
