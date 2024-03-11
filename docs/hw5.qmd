@@ -2,7 +2,10 @@
 title: "hw5"
 format: html
 editor: visual
+<<<<<<< HEAD
 embed-resources: true
+=======
+>>>>>>> 532434249998950d7410b9aa04937486a45296ec
 ---
 
 ```{python}
