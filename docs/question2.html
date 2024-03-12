@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>question2 - Lien Veldboom</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="question2_files/libs/clipboard/clipboard.min.js"></script>
+<script src="question2_files/libs/quarto-html/quarto.js"></script>
+<script src="question2_files/libs/quarto-html/popper.min.js"></script>
+<script src="question2_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="question2_files/libs/quarto-html/anchor.min.js"></script>
+<link href="question2_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="question2_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="question2_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="question2_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="question2_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">question2 - Lien Veldboom</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> altair <span class="im">as</span> alt</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>world2_url <span class="op">=</span> <span class="st">'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>world <span class="op">=</span> alt.topo_feature(world2_url, feature<span class="op">=</span><span class="st">'countries'</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>gas <span class="op">=</span> pd.read_csv(<span class="st">'https://calvin-data304.netlify.app/data/pump_price_for_gasoline_us_per_liter.csv'</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>countries <span class="op">=</span> pd.read_csv(<span class="st">'https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/all/all.csv'</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>gas_long <span class="op">=</span> gas.melt(id_vars<span class="op">=</span><span class="st">'country'</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>gas_na <span class="op">=</span> gas_long.dropna(subset<span class="op">=</span>[<span class="st">'value'</span>])</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>merged <span class="op">=</span> pd.merge(gas_na, countries[[<span class="st">'name'</span>, <span class="st">'alpha-3'</span>, <span class="st">'region'</span>,<span class="st">'sub-region'</span>]], how<span class="op">=</span><span class="st">'left'</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                  left_on<span class="op">=</span><span class="st">'country'</span>, right_on<span class="op">=</span><span class="st">'name'</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>merged_1 <span class="op">=</span> merged.dropna(subset<span class="op">=</span>[<span class="st">'region'</span>])</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>merged_final <span class="op">=</span> merged_1.astype({<span class="st">'value'</span>: <span class="st">'float'</span>})</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>merged_final[<span class="st">'Price in Gallon'</span>] <span class="op">=</span> merged_final[<span class="st">'value'</span>]<span class="op">*</span><span class="fl">3.78541</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>mean_gas_prices <span class="op">=</span> merged_final.groupby(<span class="st">'country'</span>)[<span class="st">'Price in Gallon'</span>].mean().reset_index()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>alt.Chart(world).mark_geoshape().encode(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">'Price in Gallon:Q'</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    tooltip<span class="op">=</span>[<span class="st">'country:N'</span>, <span class="st">'Price in Gallon:Q'</span>]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>).transform_lookup(</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    lookup<span class="op">=</span><span class="st">'properties.name'</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    from_<span class="op">=</span>alt.LookupData(mean_gas_prices,key <span class="op">=</span><span class="st">'country'</span>,fields<span class="op">=</span>[<span class="st">'country'</span>,<span class="st">'Price in Gallon'</span>])</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>).properties(</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    width<span class="op">=</span><span class="dv">500</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    height<span class="op">=</span><span class="dv">300</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>).project(</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">type</span><span class="op">=</span><span class="st">'equalEarth'</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+
+<style>
+  #altair-viz-3f6e8c3d64f84baa89a7279a3d7a0606.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-3f6e8c3d64f84baa89a7279a3d7a0606.vega-embed details,
+  #altair-viz-3f6e8c3d64f84baa89a7279a3d7a0606.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-3f6e8c3d64f84baa89a7279a3d7a0606"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-3f6e8c3d64f84baa89a7279a3d7a0606") {
+      outputDiv = document.getElementById("altair-viz-3f6e8c3d64f84baa89a7279a3d7a0606");
+    }
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.16.3?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      require(["vega-embed"], displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.16.3"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json", "format": {"feature": "countries", "type": "topojson"}}, "mark": {"type": "geoshape"}, "encoding": {"color": {"field": "Price in Gallon", "type": "quantitative"}, "tooltip": [{"field": "country", "type": "nominal"}, {"field": "Price in Gallon", "type": "quantitative"}]}, "height": 300, "projection": {"type": "equalEarth"}, "transform": [{"lookup": "properties.name", "from": {"data": {"name": "data-21755efaa2ce75fbf0db14999407b28a"}, "key": "country", "fields": ["country", "Price in Gallon"]}}], "width": 500, "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json", "datasets": {"data-21755efaa2ce75fbf0db14999407b28a": [{"country": "Afghanistan", "Price in Gallon": 3.2175985000000003}, {"country": "Albania", "Price in Gallon": 4.78854365}, {"country": "Algeria", "Price in Gallon": 1.0744740692307693}, {"country": "Andorra", "Price in Gallon": 5.592943275}, {"country": "Angola", "Price in Gallon": 2.0062673}, {"country": "Antigua and Barbuda", "Price in Gallon": 3.2630234200000006}, {"country": "Argentina", "Price in Gallon": 3.50150425}, {"country": "Armenia", "Price in Gallon": 3.24788178}, {"country": "Australia", "Price in Gallon": 3.35765867}, {"country": "Austria", "Price in Gallon": 4.852207363636364}, {"country": "Azerbaijan", "Price in Gallon": 2.31288551}, {"country": "Bahamas", "Price in Gallon": 3.72862885}, {"country": "Bahrain", "Price in Gallon": 1.0094426666666667}, {"country": "Bangladesh", "Price in Gallon": 3.1040362000000004}, {"country": "Barbados", "Price in Gallon": 3.9368264}, {"country": "Belarus", "Price in Gallon": 2.93369275}, {"country": "Belgium", "Price in Gallon": 5.5817591090909096}, {"country": "Belize", "Price in Gallon": 4.455968342857143}, {"country": "Benin", "Price in Gallon": 2.812850815384615}, {"country": "Bhutan", "Price in Gallon": 3.3832101875}, {"country": "Bosnia and Herzegovina", "Price in Gallon": 4.198019690000001}, {"country": "Botswana", "Price in Gallon": 2.579902507692308}, {"country": "Brazil", "Price in Gallon": 3.8011825416666665}, {"country": "Bulgaria", "Price in Gallon": 3.9746805}, {"country": "Burkina Faso", "Price in Gallon": 4.073683530769231}, {"country": "Burundi", "Price in Gallon": 3.8785893230769233}, {"country": "Cambodia", "Price in Gallon": 3.4787917900000003}, {"country": "Cameroon", "Price in Gallon": 3.4156045615384616}, {"country": "Canada", "Price in Gallon": 2.9053021750000005}, {"country": "Central African Republic", "Price in Gallon": 5.003050216666667}, {"country": "Chad", "Price in Gallon": 3.718437361538462}, {"country": "Chile", "Price in Gallon": 3.4857317083333332}, {"country": "China", "Price in Gallon": 2.8012034000000003}, {"country": "Colombia", "Price in Gallon": 2.82013045}, {"country": "Costa Rica", "Price in Gallon": 4.1497557125}, {"country": "Croatia", "Price in Gallon": 4.542492}, {"country": "Cuba", "Price in Gallon": 4.5614190500000005}, {"country": "Cyprus", "Price in Gallon": 4.49328167}, {"country": "Denmark", "Price in Gallon": 5.65746730909091}, {"country": "Djibouti", "Price in Gallon": 5.782213775000001}, {"country": "Dominican Republic", "Price in Gallon": 3.513548736363637}, {"country": "Ecuador", "Price in Gallon": 1.8043787666666669}, {"country": "Egypt", "Price in Gallon": 1.4268083846153845}, {"country": "El Salvador", "Price in Gallon": 3.0472550500000004}, {"country": "Eritrea", "Price in Gallon": 5.608715816666667}, {"country": "Estonia", "Price in Gallon": 3.8576769181818182}, {"country": "Eswatini", "Price in Gallon": 2.901000572727273}, {"country": "Ethiopia", "Price in Gallon": 2.428486107692308}, {"country": "Fiji", "Price in Gallon": 3.893564571428572}, {"country": "Finland", "Price in Gallon": 5.702203972727273}, {"country": "France", "Price in Gallon": 5.440666554545455}, {"country": "French Polynesia", "Price in Gallon": 6.018801900000001}, {"country": "Gabon", "Price in Gallon": 3.3896625909090905}, {"country": "Gambia", "Price in Gallon": 3.2175985000000003}, {"country": "Georgia", "Price in Gallon": 3.4026629888888893}, {"country": "Germany", "Price in Gallon": 5.382164763636364}, {"country": "Ghana", "Price in Gallon": 2.3906320076923078}, {"country": "Greece", "Price in Gallon": 4.8831789}, {"country": "Grenada", "Price in Gallon": 3.3900449555555556}, {"country": "Guatemala", "Price in Gallon": 2.63085995}, {"country": "Guinea", "Price in Gallon": 3.3658603916666667}, {"country": "Guyana", "Price in Gallon": 2.7843793555555556}, {"country": "Haiti", "Price in Gallon": 3.3264290375}, {"country": "Honduras", "Price in Gallon": 2.9904739}, {"country": "Hungary", "Price in Gallon": 4.594111227272728}, {"country": "Iceland", "Price in Gallon": 5.76139402}, {"country": "India", "Price in Gallon": 3.2491435833333338}, {"country": "Indonesia", "Price in Gallon": 1.7160525333333334}, {"country": "Iraq", "Price in Gallon": 2.2964820666666665}, {"country": "Ireland", "Price in Gallon": 5.120627345454546}, {"country": "Israel", "Price in Gallon": 5.103420936363636}, {"country": "Italy", "Price in Gallon": 5.832972681818182}, {"country": "Jamaica", "Price in Gallon": 3.0775383300000003}, {"country": "Japan", "Price in Gallon": 4.835000954545455}, {"country": "Jordan", "Price in Gallon": 3.0007977454545456}, {"country": "Kazakhstan", "Price in Gallon": 2.171448827272727}, {"country": "Kenya", "Price in Gallon": 3.4068690000000004}, {"country": "Kuwait", "Price in Gallon": 0.87442971}, {"country": "Latvia", "Price in Gallon": 3.9609153727272726}, {"country": "Lebanon", "Price in Gallon": 2.90719488}, {"country": "Lesotho", "Price in Gallon": 3.0451520444444444}, {"country": "Liberia", "Price in Gallon": 3.336568528571429}, {"country": "Libya", "Price in Gallon": 0.5551934666666667}, {"country": "Liechtenstein", "Price in Gallon": 4.916826988888889}, {"country": "Lithuania", "Price in Gallon": 3.991886909090909}, {"country": "Luxembourg", "Price in Gallon": 4.442694827272728}, {"country": "Madagascar", "Price in Gallon": 3.7766744384615385}, {"country": "Malawi", "Price in Gallon": 4.172686561538462}, {"country": "Malaysia", "Price in Gallon": 1.7349795833333335}, {"country": "Maldives", "Price in Gallon": 4.5046379000000005}, {"country": "Mali", "Price in Gallon": 4.1755984153846155}, {"country": "Malta", "Price in Gallon": 5.06487858}, {"country": "Marshall Islands", "Price in Gallon": 5.4509904}, {"country": "Mauritania", "Price in Gallon": 3.8201095916666667}, {"country": "Mauritius", "Price in Gallon": 5.649724425}, {"country": "Mexico", "Price in Gallon": 2.4605165}, {"country": "Monaco", "Price in Gallon": 7.372085975}, {"country": "Mongolia", "Price in Gallon": 3.0245425900000003}, {"country": "Montenegro", "Price in Gallon": 4.422047136363637}, {"country": "Morocco", "Price in Gallon": 3.965944938461539}, {"country": "Mozambique", "Price in Gallon": 3.4796653461538463}, {"country": "Myanmar", "Price in Gallon": 2.10090255}, {"country": "Namibia", "Price in Gallon": 2.7286497083333336}, {"country": "Nauru", "Price in Gallon": 6.056656}, {"country": "Nepal", "Price in Gallon": 3.3690149}, {"country": "Netherlands", "Price in Gallon": 6.122040354545455}, {"country": "New Zealand", "Price in Gallon": 3.9471502454545457}, {"country": "Nicaragua", "Price in Gallon": 3.0220189833333335}, {"country": "Niger", "Price in Gallon": 3.5437261307692305}, {"country": "Nigeria", "Price in Gallon": 1.2724801307692308}, {"country": "North Macedonia", "Price in Gallon": 4.356662781818182}, {"country": "Norway", "Price in Gallon": 6.435197000000001}, {"country": "Oman", "Price in Gallon": 1.22647284}, {"country": "Pakistan", "Price in Gallon": 2.814968527272727}, {"country": "Panama", "Price in Gallon": 2.543107263636364}, {"country": "Papua New Guinea", "Price in Gallon": 3.16460276}, {"country": "Paraguay", "Price in Gallon": 3.4794226916666666}, {"country": "Peru", "Price in Gallon": 3.9683714833333337}, {"country": "Philippines", "Price in Gallon": 2.5866968333333333}, {"country": "Poland", "Price in Gallon": 4.270630736363636}, {"country": "Portugal", "Price in Gallon": 5.5796943400000005}, {"country": "Qatar", "Price in Gallon": 0.8848395875}, {"country": "Romania", "Price in Gallon": 3.8404705090909093}, {"country": "Rwanda", "Price in Gallon": 4.286976825}, {"country": "Samoa", "Price in Gallon": 3.6718477000000003}, {"country": "Saudi Arabia", "Price in Gallon": 0.7157866181818182}, {"country": "Senegal", "Price in Gallon": 4.495902338461539}, {"country": "Serbia", "Price in Gallon": 4.267189454545455}, {"country": "Sierra Leone", "Price in Gallon": 3.0352105636363635}, {"country": "Singapore", "Price in Gallon": 3.9999165666666667}, {"country": "Slovenia", "Price in Gallon": 4.4048407272727275}, {"country": "Somalia", "Price in Gallon": 3.77026836}, {"country": "South Africa", "Price in Gallon": 3.028328}, {"country": "South Sudan", "Price in Gallon": 5.728587133333334}, {"country": "Spain", "Price in Gallon": 4.501196618181819}, {"country": "Sri Lanka", "Price in Gallon": 3.533049333333333}, {"country": "Sudan", "Price in Gallon": 2.015002861538462}, {"country": "Suriname", "Price in Gallon": 3.3774269222222224}, {"country": "Sweden", "Price in Gallon": 5.444107836363637}, {"country": "Switzerland", "Price in Gallon": 4.8659724909090905}, {"country": "Tajikistan", "Price in Gallon": 3.05482587}, {"country": "Thailand", "Price in Gallon": 2.7854308583333336}, {"country": "Timor-Leste", "Price in Gallon": 4.4181142428571425}, {"country": "Togo", "Price in Gallon": 3.0661821}, {"country": "Trinidad and Tobago", "Price in Gallon": 1.5466103714285715}, {"country": "Tunisia", "Price in Gallon": 2.6497870000000003}, {"country": "Turkey", "Price in Gallon": 5.8398552454545465}, {"country": "Turkmenistan", "Price in Gallon": 0.50724494}, {"country": "Uganda", "Price in Gallon": 3.8674272166666666}, {"country": "Ukraine", "Price in Gallon": 3.00183013}, {"country": "Uruguay", "Price in Gallon": 4.728321218181819}, {"country": "Uzbekistan", "Price in Gallon": 2.577520081818182}, {"country": "Vanuatu", "Price in Gallon": 4.9588871}, {"country": "Yemen", "Price in Gallon": 1.52173482}, {"country": "Zambia", "Price in Gallon": 4.1954960833333335}, {"country": "Zimbabwe", "Price in Gallon": 3.252298091666667}]}}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
