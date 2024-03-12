@@ -1,0 +1,81 @@
+---
+title: "question4 - Lien. Veldboom"
+format: html
+editor: visual
+---
+
+```{python}
+import altair as alt
+import pandas as pd
+```
+
+```{python}
+lego = pd.read_csv('legosets.csv')
+```
+
+```{python}
+alt.data_transformers.disable_max_rows()
+lego['Year'] = pd.to_datetime(lego['Year'], format='%Y')
+lego_na = lego.dropna(subset=['Pieces','Minifigures'])
+```
+
+```{python}
+def minifig_value(x):
+    if x > 20:
+        return '20+'
+    elif x >= 6:
+        return '6-20'
+    else:
+        return '0-5'
+def pieces_value(x):
+    if x > 2001:
+        return '2001+'
+    elif x >= 1001:
+        return '1001-2000'
+    elif x >= 501:
+        return '501-1000'
+    elif x >= 101:
+        return '101-500'
+    else:
+        return '0-100'
+lego_na['Minifigure Range'] = lego_na['Minifigures'].apply(lambda x: minifig_value(x))
+lego_na['Piece Range'] = lego_na['Pieces'].apply(lambda x: pieces_value(x))
+print(lego_na)
+
+
+```
+
+```{python}
+selection = alt.selection_multi(fields=['Minifigure Range', 'Piece Range'], bind='legend')
+
+color = alt.condition(
+    selection,
+    alt.Color('Piece Range:O'),
+    alt.value('lightgray')
+)
+
+scatter = alt.Chart(lego_na).mark_point().encode(
+    alt.X(field="USD_MSRP", type="quantitative", title=" Price in USD"),
+    alt.Y(field="Theme", type="nominal", title=" "),
+     color=alt.condition(selection, alt.Color('Piece Range:O', scale=alt.Scale(scheme='viridis')), alt.value('lightgray')),
+    tooltip=['Name:N', 'Pieces:Q','Minifigures:Q','USD_MSRP:Q']
+).properties(width=1000, title="More Minifigures, More Pieces, More Expensive ").add_selection(selection)
+
+legend = alt.Chart(lego_na).mark_rect().encode(
+    alt.Y('Minifigure Range:O', axis=alt.Axis(orient='right')),
+    x='Piece Range:O',
+     color=alt.condition(selection, alt.Color('Piece Range:O', scale=alt.Scale(scheme='viridis')), alt.value('lightgray')),
+).add_selection(selection)
+
+(scatter | legend)
+```
+
+One alternative I thought about was making a bar graph within each price range for each theme or doing the same thing but with minifigure range.
+
+\*\*I wanted to change the color from this theme to red = lower piece count transitioning to green for higher prices. I couldn't figure this out though as it kept giving me an error when I tried different color schemes.
+
+Although I couldn't get the color scheme to work, I put some thought into the kind of scale I was using. As a Lego collector who likes bigger sets, the red would indicate that this set is smaller, while the green one indicates bigger sets. I used a wider axis to prevent some overlap with the dots. This will allow you to tooltip over the sets and see which one you are looking at. This allows the viewer to see the set name, price, \# of pieces, and \# of minifigures.
+
+I added an interaction for people to select ranges for minifigures and pieces to help narrow the decision down. This would allow them to pick sets that have a lot of minifigures or fewer minifigures and more pieces.
+
+When making this graph, I kept the audience in mind and how they would want to interact with this graph.

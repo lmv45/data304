@@ -1,0 +1,50 @@
+---
+title: "question1 - Lien Veldboom"
+format: html
+editor: visual
+---
+
+1a. I like how Henry included a label within the bar chart on his comparing twins graph. Most of the percentages were so close together it was hard to tell how different they were by adding a label right on top of the graph that allows you to see how different they are quickly.
+
+1b. I didn't like Daniels comparing twins graph. I am slightly confused about what I am looking at especially because it seems some of the colors are overlapping each other. That makes it hard to understand the graph and see the main point of the graph. When the colors overlap it looks as if some of the colors aren't even on the key, which is confusing to the reader.
+
+1c.
+
+```{python}
+import altair as alt
+import pandas as pd
+```
+
+```{python}
+twins_url = "https://calvin-data304.netlify.app/data/twins-genetics-long.json"
+twins = pd.read_json(twins_url)
+
+region_selection = alt.selection_point(fields=['region'], bind='legend')
+
+twins_graph = alt.Chart(twins).mark_bar().encode(
+    x=alt.X('id:O', title=''),
+    y=alt.Y('genetic share:Q', title=''),
+    color=alt.condition(region_selection, alt.Color('region:N', title=''), alt.value('lightgray')),
+    row='kit:N',
+    column='pair:N'
+).properties(
+    height=100,
+    width=80,
+    title='DNA of Identical twins, Not Always Fully Identical'
+).add_params(region_selection)
+
+twins_graph
+```
+
+```{python}
+kit_graph = alt.Chart(twins).mark_bar().encode(
+    x=alt.X('kit:O', title=''),
+    y=alt.Y('genetic share:Q', title=''),
+    xOffset=('id:N'),
+    color=('region:N')
+    ).facet(
+    column = alt.Column("pair:N", title="")).properties(title='Different DNA Kits Lead to Different results')
+kit_graph
+```
+
+From these two graphs, you can see there are differences between the different kits and between the identical twins. The first graph lets us see what areas are represented within each twin. Although they are considered identical twins, each pair's results aren't always the same. Some of the results indicate that one twin has a small percentage of a different region, while the other twin has nothing from it. The second graph allows us to see that each kit used for testing leads to slightly different results. While they are pretty similar it is important to notice these differences, especially when a whole new region is present within a testing kit.

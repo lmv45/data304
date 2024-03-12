@@ -1,0 +1,46 @@
+---
+title: "question2 - Lien Veldboom"
+format: html
+editor: visual
+---
+
+```{python}
+import altair as alt
+import pandas as pd
+```
+
+```{python}
+world2_url = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
+world = alt.topo_feature(world2_url, feature='countries')
+gas = pd.read_csv('https://calvin-data304.netlify.app/data/pump_price_for_gasoline_us_per_liter.csv')
+countries = pd.read_csv('https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/all/all.csv')
+gas_long = gas.melt(id_vars='country')
+gas_na = gas_long.dropna(subset=['value'])
+merged = pd.merge(gas_na, countries[['name', 'alpha-3', 'region','sub-region']], how='left',
+                  left_on='country', right_on='name')
+merged_1 = merged.dropna(subset=['region'])
+merged_final = merged_1.astype({'value': 'float'})
+merged_final['Price in Gallon'] = merged_final['value']*3.78541
+mean_gas_prices = merged_final.groupby('country')['Price in Gallon'].mean().reset_index()
+```
+
+```{python}
+
+alt.Chart(world).mark_geoshape().encode(
+    color='Price in Gallon:Q',
+    tooltip=['country:N', 'Price in Gallon:Q']
+).transform_lookup(
+    lookup='properties.name',
+    from_=alt.LookupData(mean_gas_prices,key ='country',fields=['country','Price in Gallon'])
+).properties(
+    width=500,
+    height=300
+).project(
+    type='equalEarth'
+)
+
+```
+
+\*The empty spots within the map are due to NA data.
+
+\*\* I was going to change the color scheme here for red to be high gas prices and green to be low. However, I couldn't figure out how to do this.

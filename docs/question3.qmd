@@ -1,0 +1,63 @@
+---
+title: "question3 - Lien Veldboom"
+format: html
+editor: visual
+---
+
+```{python}
+import altair as alt
+import pandas as pd
+```
+
+```{python}
+fertility = pd.read_csv('https://docs.google.com/spreadsheets/d/e/2PACX-1vRPGUdLWBIt1vtXQ5mbCjffbbL-_AVjaJVRU5yKBcNP8yr85bq865vMTSuDHOxNEfHVb5Cz9J2bj80j/pub?output=csv')
+
+fertility['Year'].replace(to_replace="2015-2016", value="2015", inplace=True)
+fertility['Year'].replace(to_replace="2004-2005", value="2004", inplace=True)
+fertility['Year'].replace(to_replace="1991-1992", value="1991", inplace=True)
+# Convert numeric columns to float (assuming they are meant to be numeric)
+numeric_columns = ['Fertility Rate', 'Contraception Perc', 'Family Planning Perc']
+fertility[numeric_columns] = fertility[numeric_columns].apply(pd.to_numeric, errors='coerce')
+
+sixteenrow = {'Year': '2016', 'Fertility Rate': 5.2, 'Contraception Perc': 38.4, 'Family Planning Perc': 22.1}
+fiverow = {'Year': '2005', 'Fertility Rate': 5.7, 'Contraception Perc': 17.6, 'Family Planning Perc': 24.3}
+ninetworow = {'Year': '1992', 'Fertility Rate': 6.2, 'Contraception Perc': 5.9, 'Family Planning Perc': 27.8}
+fertility = fertility.append(sixteenrow, ignore_index=True)
+fertility = fertility.append(fiverow , ignore_index=True)
+fertility = fertility.append(ninetworow , ignore_index=True)
+finalfertility = fertility
+print(finalfertility)
+```
+
+```{python}
+brush = alt.selection_interval(encodings=['x'])
+
+base = alt.Chart(finalfertility).mark_line(point=True).transform_fold(
+    fold=['Contraception Perc', 'Fertility Rate', 'Family Planning Perc'], 
+    as_=['variable', 'value']
+).encode(
+    alt.X(field="Year", type="temporal", title=""),
+    y='value:Q',
+    color=alt.Color('variable:N', scale=alt.Scale(range=['#003366', '#FFAA00','#0D5914']))
+)
+
+final = base
+
+upper = final.encode(
+    alt.X('Year:T', title="").scale(domain=brush)
+).properties(
+    title=alt.Title("Contraception Rates Increase, while Fertiltiy and Unmet Need Family Planning Remain Steady ", subtitle="Brush lower panel to zoom"),
+    height=400, width=750
+)
+
+lower = final.properties(
+    height=400, width=750
+).add_selection(brush)
+
+upper & lower
+
+```
+
+For the rows with two years, I split them up and just used the same value.
+
+Overall, it looks like contraception rates have significantly increased since 1991, while the unmet family planning and fertility rate has in general stayed about the same. It looks like the unmet family planning percentage increased for a few years, but then went back down at the most recent year. The fertility rate has slowly decreased throughout the years, which might be a concern eventually if this trend continues.
