@@ -1,0 +1,50 @@
+---
+title: "question5 - Lien Veldboom"
+format: html
+editor: visual
+embed-resources: true
+---
+
+a.  an encoding channel other than x or y.
+
+    a.  question 1:offset, color, row, column
+
+    b.  question 2: color
+
+    c.  question 3: color
+
+    d.  question 4: color
+
+b.  facets
+
+    a.  question 1: second graph
+
+c.  layers
+
+    a.  Question 3: created a base graph and then layered it to have brush interaction
+
+d.  concatenation
+
+    a.  question 3: used to have two graphs right on top of each other for zooming in
+
+    b.  question 4: used to have the interactive key next to the graph
+
+e.  non-default configuration of a channel’s scale or guide
+
+    a.  question 1: changing of the color with the interactions
+
+    b.  question 2: not sure if this totally counts, but projection type was changed to equal earth.
+
+    c.  question 3: color
+
+    d.  question 4: color
+
+f.  interaction (tooltips, panning/zooming, brushing, etc.)
+
+    a.  Question 1: Interaction with key, when you click on a certain region it only selects that region in the graph and turns the rest grey.
+
+    b.  Question 2: Tooltip
+
+    c.  question 3: brushing
+
+    d.  question 4: tooltip, interactive key
