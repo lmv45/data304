@@ -1,16 +1,16 @@
 <h2>My Final Project Page!</h2>
 
-**\[question1\]([link](https://lmv45.github.io/data304/question1.html))**
+**\[question1\]([link](q1.html))**
 
-**\[question2\]([link](https://lmv45.github.io/data304/question2.html))**
+**\[question2\]([link](q2.html))**
 
-**\[question3\]([link](https://lmv45.github.io/data304/question3.html))**
+**\[question3\]([link](q3.html))**
 
-**\[question4\]([link](https://lmv45.github.io/data304/question4.html))**
+**\[question4\]([link](q4.html))**
 
-**\[question5\]([link](https://lmv45.github.io/data304/question5.html))**
+**\[question5\]([link](q5.html))**
 
-**\[question6\]([link](https://lmv45.github.io/data304/question6.html))**
+**\[question6\]([link](q6.html))**
 
 **\[FertilityData\]([link](https://docs.google.com/spreadsheets/d/e/2PACX-1vRPGUdLWBIt1vtXQ5mbCjffbbL-_AVjaJVRU5yKBcNP8yr85bq865vMTSuDHOxNEfHVb5Cz9J2bj80j/pub?output=csv))**
 
