@@ -1,6 +1,7 @@
 ---
 title: "hw7 - Lien Veldboom"
 format: html
+title-block-banner: true
 editor: visual
 embed-resources: true
 ---

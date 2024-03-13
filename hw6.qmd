@@ -1,0 +1,156 @@
+
+** add error bars to 2 graphs
+
+```{python}
+democracy = pd.read_csv('https://calvin-data304.netlify.app/data/wvs.csv')
+grouped_data = democracy.groupby(['country', 'age6', 'democracy_importance']).size().reset_index(name='count')
+responses_10 = grouped_data[grouped_data['democracy_importance'] == 10]
+total_count = grouped_data.groupby(['country', 'age6'])['count'].sum().reset_index(name='total_count')
+responses_10 = pd.merge(responses_10, total_count, on=['country', 'age6'])
+responses_10['proportion'] = responses_10['count'] / responses_10['total_count']
+
+base = alt.Chart(responses_10).encode(
+    x=alt.X("age6:O", sort='-x',title=""),
+    y=alt.Y("proportion:Q", title="")
+)
+
+error = base.mark_errorband(extent="ci")
+
+line = base.mark_line().encode(
+    y=alt.Y("proportion:Q")
+)
+
+points = base.mark_circle(size=15).encode(
+    y=alt.Y("proportion:Q")
+)
+
+combined_chart = error + points + line
+
+combined_chart.facet(
+    column = alt.Column("country:N", title="")).resolve_scale(y='independent').properties(
+    title="Percentage of people who said 10 for importance of democracy by age group"
+)
+```
+
+```{python}
+average_democracy = worldValues[['country', 'age6', 'democracy_importance']]
+
+worldValuesErrorBandAgg = worldValuesErrorBand.groupby(['country', 'age6'])['democracy_importance'].mean().reset_index()
+
+worldValuesErrorBand.head()
+average_democracy = democracy.groupby(['country', 'age6'])['democracy_importance'].mean().reset_index(name='average_democracy')
+base = alt.Chart(average_democracy ).encode(
+    x=alt.X('age6:N', title='Age Group', sort='-x'),
+    y=alt.Y('average_democracy:Q', title='Average Democracy Importance')
+)
+
+error = base.mark_errorband(extent="ci")
+
+line = base.mark_line()
+
+points = base.mark_circle(size=20)
+
+combined1 = error + points + line
+
+combined1.facet(
+    column = alt.Column("country:N", title="")).resolve_scale(y='independent').properties(
+    title="Average Score of people's response for importance of democracy by age group")
+```
+
+
+
+```{python}
+democracy = pd.read_csv('https://calvin-data304.netlify.app/data/wvs.csv')
+grouped_data = democracy.groupby(['country', 'age', 'democracy_importance']).size().reset_index(name='count')
+responses_10 = grouped_data[grouped_data['democracy_importance'] == 10]
+total_count = grouped_data.groupby(['country', 'age'])['count'].sum().reset_index(name='total_count')
+responses_10 = pd.merge(responses_10, total_count, on=['country', 'age'])
+responses_10['proportion'] = responses_10['count'] / responses_10['total_count']
+
+base = alt.Chart(responses_10).encode(
+    x=alt.X("age:O", sort='-x',title=""),
+    y=alt.Y("proportion:Q", title="")
+)
+
+error = base.mark_errorband(extent="ci")
+
+line = base.mark_line().encode(
+    y=alt.Y("proportion:Q")
+)
+
+points = base.mark_circle(size=15).encode(
+    y=alt.Y("proportion:Q")
+)
+
+combined_chart = error + points + line
+
+combined_chart.facet(
+    column = alt.Column("country:N", title="")).resolve_scale(y='independent').properties(
+    title="Percentage of people who said 10 for importance of democracy by age group"
+)
+```
+
+```{python}
+average_democracy = democracy.groupby(['country', 'age'])['democracy_importance'].mean().reset_index(name='average_democracy')
+base = alt.Chart(average_democracy ).encode(
+    x=alt.X('age:N', title='Age Group', sort='-x'),
+    y=alt.Y('average_democracy:Q', title='Average Democracy Importance')
+)
+
+error = base.mark_errorband(extent="ci")
+
+line = base.mark_line().encode(
+    y=alt.Y("average_democracy):Q")
+)
+
+points = base.mark_circle(size=20).encode(
+    y=alt.Y("average_democracy:Q")
+)
+
+combined1 = alt.layer(error,line, points, data=average_democracy)
+
+combined1.facet(
+    column = alt.Column("country:N", title="")).resolve_scale(y='independent').properties(
+    title="Average Score of people's response for importance of democracy by age group")
+```
+
+I personally think these are both worse, there is so much going up and down that it's hard to see any patterns wtihin the data. 
+
+*** Not sure if I did this correctly.
+```{python}
+average_democracy = democracy.groupby(['country', 'age6'])['democracy_importance'].mean().reset_index(name='average_democracy')
+
+point = alt.chart(average_democracy).mark_point.encode(
+  x='age:Q',
+  y='democracy_importance' 
+)
+```
+
+```{python}
+alt.Chart(democracy).mark_circle().encode(
+    x=alt.X('age:N', title='Age Group'),
+    y=alt.Y('democracy_importance:Q', title='Average Democracy Importance'),
+    color=alt.Color('country:N', title='Country'),
+).transform_regression('age', 'democracy_importance').properties(
+    width=600,
+    title='Linear Regression: Democracy Importance by Age Group (Faceted by Country)'
+).facet(
+    column=alt.Column('country:N', title='Country')
+)
+
+```
+
+```{python}
+alt.Chart(democracy).mark_circle().encode(
+    x=alt.X('age:N', title='Age Group'),
+    y=alt.Y('democracy_importance:Q', title='Average Democracy Importance',axis=alt.Axis(values=[0, 5, 10, 15, 20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100]))),
+    color=alt.Color('country:N', title='Country'),
+).transform_regression('age', 'democracy_importance', method ='poly').properties(
+    width=600,
+    title='Linear Regression: Democracy Importance by Age Group (Faceted by Country)'
+).facet(
+    column=alt.Column('country:N', title='Country')
+)
+
+```
+
